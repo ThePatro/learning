@@ -46,6 +46,10 @@ jobs:
         run: |
           dotnet tool install --global dotnet-sonarscanner
 
+      - name: Install Coverlet tool
+        run: |
+          dotnet tool install --global coverlet.console
+
       - name: Build and analyze
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
@@ -53,4 +57,5 @@ jobs:
         run: |
           dotnet-sonarscanner begin /k:"ThePatro_learning" /o:"thepatro" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build src
+          dotnet test src /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
