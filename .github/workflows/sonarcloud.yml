@@ -55,7 +55,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          dotnet-sonarscanner begin /k:"ThePatro_learning" /o:"thepatro" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="**/Example.Console.Tests/coverage.cobertura.xml"
+          dotnet-sonarscanner begin /k:"ThePatro_learning" /o:"thepatro" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="src/Example.Console.Tests/coverage.xml"
           dotnet build src
-          dotnet test src /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+          dotnet test src /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=""./coverage.xml"
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
