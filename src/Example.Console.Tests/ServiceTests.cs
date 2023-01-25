@@ -11,4 +11,15 @@ public class ServiceTests
         
         Assert.True(result);
     }
+    
+    [Theory]
+    [InlineData(1, 2, 3)]
+    public void CalculateStuffTest(int a, int b, int expected)
+    {
+        var service = new Service();
+
+        var result = service.CalculateStuff(a, b);
+        
+        Assert.Equal(result, expected);
+    }
 }
