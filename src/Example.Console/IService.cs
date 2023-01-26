@@ -7,4 +7,16 @@ public interface IService
     public int CalculateStuff(int a, int b);
 
     public string GetFirstName();
+
+    public double GetRandomDouble();
+    
+    public string GetRandomDoubleAsString();
+
+    public int GetRandomInt();
+    
+    public string GetRandomIntAsString();
+
+    public float GetRandomFloat();
+    
+    public string GetRandomFloatAsString();
 }
