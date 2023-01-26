@@ -11,4 +11,9 @@ public class Service : IService
     {
         return a + b;
     }
+
+    public string GetFirstName()
+    {
+        return "Patryk";
+    }
 }
