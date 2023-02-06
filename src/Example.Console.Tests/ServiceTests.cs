@@ -25,7 +25,6 @@ public class ServiceTests
         Assert.Equal(result, expected);
     }
     
-    /*
     [Fact]
     public void GetFirstNameTest()
     {
@@ -37,5 +36,4 @@ public class ServiceTests
 
         result.Should().Be(expectedResult);
     }
-    */
 }
