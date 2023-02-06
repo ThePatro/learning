@@ -13,10 +13,49 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- checkout: self
+  clean: true
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: UseDotNet@2
+  displayName: 'Use .NET 7.0.x Sdk'
+  inputs:
+    packageType: sdk
+    version: 7.0.x
+    installationPath: $(Agent.ToolsDirectory)/dotnet
+
+- task: NuGetToolInstaller@1
+
+# restore packages from nuget
+- task: DotNetCoreCLI@2
+  displayName: Restore Packages
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+
+# Perform a build of the .csproj
+- task: DotNetCoreCLI@2
+  displayName: Build Projects
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: --configuration Release
+
+ # Run Unit test for functions
+- task: DotNetCoreCLI@2
+  displayName: Run Unit Tests
+  inputs:
+    command: 'test'
+    projects: '**/*Tests.csproj'
+    arguments: '--configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+    publishTestResults: true
+
+# Publish code coverage results
+# Publish Cobertura or JaCoCo code coverage results from a build
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage results'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/Coverage/coverage.cobertura.xml'
+    reportDirectory: '$(Build.SourcesDirectory)/TestResults/Coverage/'
+    failIfCoverageEmpty: false
